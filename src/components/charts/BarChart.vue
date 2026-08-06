@@ -148,8 +148,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative">
-    <canvas ref="canvasRef" class="w-full h-full"></canvas>
+  <div class="relative h-full w-full overflow-hidden">
+    <canvas ref="canvasRef" class="absolute inset-0 w-full h-full"></canvas>
     <div v-if="!labels || labels.length === 0" class="absolute inset-0 flex items-center justify-center text-gray-400">
       <p class="text-sm">Sin datos para mostrar</p>
     </div>
