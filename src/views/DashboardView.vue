@@ -1,13 +1,16 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import api from '../services/api'
-import ThemeToggle from '../components/ThemeToggle.vue'
 import KPICard from '../components/KPICard.vue'
 import DoughnutChart from '../components/charts/DoughnutChart.vue'
 import BarChart from '../components/charts/BarChart.vue'
 
-const router = useRouter()
+const goLogin = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  window.location.href = '/login'
+}
+
 const stats = ref({
   totalUsers: 0,
   totalTransactions: 0,
@@ -21,17 +24,6 @@ const error = ref(null)
 const dataReady = computed(() =>
   !loading.value && !error.value
 )
-
-const user = computed(() => {
-  const data = localStorage.getItem('user')
-  return data ? JSON.parse(data) : null
-})
-
-const logout = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('user')
-  router.push('/login')
-}
 
 const expenseByCategory = ref([])
 const monthlyComparative = ref([])
@@ -121,48 +113,20 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Navigation -->
-    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-100 dark:border-gray-700">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center space-x-8">
-            <div class="flex items-center space-x-2">
-              <img src="/logo32.png" alt="OptiGasto" class="h-8 w-8" />
-              <h1 class="text-xl font-bold text-gray-800 dark:text-white">OptiGasto</h1>
-            </div>
-            <div class="hidden md:flex space-x-1">
-              <router-link to="/" class="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20">Dashboard</router-link>
-              <router-link to="/users" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700">Usuarios</router-link>
-              <router-link to="/categories" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700">Categorías</router-link>
-              <router-link to="/audit" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700">Auditoría</router-link>
-            </div>
-          </div>
-          <div class="flex items-center space-x-3">
-            <ThemeToggle />
-            <span class="text-gray-600 dark:text-gray-300 text-sm hidden sm:block">{{ user?.name }}</span>
-            <button @click="logout" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition-colors">Cerrar sesión</button>
-          </div>
-        </div>
-      </div>
-    </nav>
-
+  <div>
     <!-- Page Header -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-100 dark:border-gray-700">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-            <p class="text-gray-500 dark:text-gray-400 mt-1">Visión general del sistema financiero</p>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-medium rounded-full">Administrador</span>
-          </div>
+    <div class="mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Estadísticas</h1>
+          <p class="text-gray-500 dark:text-gray-400 mt-1">Visión general del sistema financiero</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-medium rounded-full">Administrador</span>
         </div>
       </div>
-    </header>
+    </div>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
         <svg class="animate-spin h-8 w-8 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -179,7 +143,7 @@ onUnmounted(() => {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v2m0-2h2m-2 0H10m9.364-7.364A9 9 0 1112 3a9 9 0 017.364 4.636z" />
           </svg>
           <p class="text-red-700 dark:text-red-300 font-medium">{{ error }}</p>
-          <button @click="logout" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+          <button @click="goLogin" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
             Volver a inicio de sesión
           </button>
         </div>
@@ -315,6 +279,5 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </main>
   </div>
 </template>

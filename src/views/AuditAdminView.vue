@@ -1,43 +1,17 @@
 <template>
-  <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-    <nav class="bg-white dark:bg-gray-800 shadow-md border-b border-gray-100 dark:border-gray-700">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center space-x-8">
-            <div class="flex items-center space-x-2">
-              <img src="/logo32.png" alt="OptiGasto" class="h-8 w-8" />
-              <h1 class="text-xl font-bold text-gray-800 dark:text-white">OptiGasto</h1>
-            </div>
-            <div class="hidden md:flex space-x-1">
-              <router-link to="/" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700">Dashboard</router-link>
-              <router-link to="/users" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700">Usuarios</router-link>
-              <router-link to="/categories" class="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700">Categorías</router-link>
-              <router-link to="/audit" class="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20">Auditoría</router-link>
-            </div>
-          </div>
-          <div class="flex items-center space-x-3">
-            <ThemeToggle />
-            <span class="text-gray-600 dark:text-gray-300 text-sm hidden sm:block">{{ user?.name }}</span>
-            <button @click="logout" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition-colors">Cerrar sesión</button>
-          </div>
-        </div>
-      </div>
-    </nav>
+  <div>
+    <!-- Page Header -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Auditoría Financiera</h1>
+    </div>
 
-    <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-100 dark:border-gray-700">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Auditoría Financiera</h1>
-      </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div v-if="error" class="text-center py-12">
         <div class="max-w-md mx-auto bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6">
           <svg class="w-12 h-12 text-red-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m0 0v2m0-2h2m-2 0H10m9.364-7.364A9 9 0 1112 3a9 9 0 017.364 4.636z" />
           </svg>
           <p class="text-red-700 dark:text-red-300 font-medium">{{ error }}</p>
-          <button @click="logout" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+          <button @click="goLogin" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
             Iniciar sesión como administrador
           </button>
         </div>
@@ -86,17 +60,13 @@
           </div>
         </div>
       </template>
-    </main>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import api from '../services/api'
-import ThemeToggle from '../components/ThemeToggle.vue'
 
-const router = useRouter()
 const transactions = ref([])
 const search = ref('')
 const loading = ref(true)
@@ -110,6 +80,12 @@ const user = computed(() => {
 
 const isAdmin = computed(() => user.value?.role === 'administrador')
 
+const goLogin = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  window.location.href = '/login'
+}
+
 const filteredTransactions = computed(() => {
   if (!search.value) return transactions.value
   const term = search.value.toLowerCase()
@@ -119,12 +95,6 @@ const filteredTransactions = computed(() => {
     String(t.amount).includes(term)
   )
 })
-
-const logout = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('user')
-  router.push('/login')
-}
 
 const loadTransactions = async () => {
   loading.value = true

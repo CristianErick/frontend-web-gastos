@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
+import AdminLayout from '../components/AdminLayout.vue'
 import DashboardView from '../views/DashboardView.vue'
 import UsersAdminView from '../views/UsersAdminView.vue'
 import CategoriesAdminView from '../views/CategoriesAdminView.vue'
@@ -16,27 +17,30 @@ const routes = [
   },
   {
     path: '/',
-    name: 'Dashboard',
-    component: DashboardView,
+    component: AdminLayout,
     meta: { auth: true, admin: true },
-  },
-  {
-    path: '/users',
-    name: 'Users',
-    component: UsersAdminView,
-    meta: { auth: true, admin: true },
-  },
-  {
-    path: '/categories',
-    name: 'Categories',
-    component: CategoriesAdminView,
-    meta: { auth: true, admin: true },
-  },
-  {
-    path: '/audit',
-    name: 'Audit',
-    component: AuditAdminView,
-    meta: { auth: true, admin: true },
+    children: [
+      {
+        path: '',
+        name: 'Dashboard',
+        component: DashboardView,
+      },
+      {
+        path: 'users',
+        name: 'Users',
+        component: UsersAdminView,
+      },
+      {
+        path: 'categories',
+        name: 'Categories',
+        component: CategoriesAdminView,
+      },
+      {
+        path: 'audit',
+        name: 'Audit',
+        component: AuditAdminView,
+      },
+    ],
   },
 ]
 
