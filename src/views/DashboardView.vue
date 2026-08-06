@@ -184,7 +184,7 @@ onUnmounted(() => {
           <!-- Expenses by Category - Doughnut Chart -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Gastos por Categoría</h2>
-            <div v-if="expenseByCategory.length > 0" class="h-72">
+            <div v-if="expenseByCategory.length > 0" class="h-80">
               <DoughnutChart
                 :labels="[...doughnutLabels]"
                 :data="[...doughnutData]"
@@ -199,7 +199,7 @@ onUnmounted(() => {
           <!-- Monthly Comparative - Bar Chart -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Ingresos vs Gastos (12 meses)</h2>
-            <div v-if="monthlyComparative.length > 0" class="h-72">
+            <div v-if="monthlyComparative.length > 0" class="h-80">
               <BarChart
                 :labels="[...barLabels]"
                 :incomeData="[...barIncomeData]"
@@ -216,13 +216,15 @@ onUnmounted(() => {
         <!-- Historical Balance Chart -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Balance Histórico Acumulado</h2>
-          <div v-if="historicalBalance.length > 0" class="h-80">
-            <BarChart
-              :labels="[...histLabels]"
-              :incomeData="[...histPositive]"
-              :expenseData="[...histNegative]"
-              title="Evolución del Balance Acumulado"
-            />
+          <div v-if="historicalBalance.length > 0">
+            <div class="h-64">
+              <BarChart
+                :labels="[...histLabels]"
+                :incomeData="[...histPositive]"
+                :expenseData="[...histNegative]"
+                title="Evolución del Balance Acumulado"
+              />
+            </div>
             <div class="mt-4 flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
               <span class="flex items-center gap-1">
                 <span class="w-3 h-3 rounded-full bg-green-500"></span>

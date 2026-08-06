@@ -65,7 +65,7 @@ const renderChart = () => {
           labels: {
             usePointStyle: true,
             pointStyle: 'circle',
-            padding: 16,
+            padding: 12,
             font: {
               size: 12,
               family: 'Inter, system-ui, sans-serif',

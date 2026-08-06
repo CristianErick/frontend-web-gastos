@@ -101,12 +101,13 @@ const renderChart = () => {
         title: {
           display: !!props.title,
           text: props.title,
+          position: 'bottom',
           font: {
-            size: 16,
+            size: 14,
             weight: '600',
           },
           color: '#1f2937',
-          padding: { bottom: 20 },
+          padding: { top: 12 },
         },
       },
       scales: {
